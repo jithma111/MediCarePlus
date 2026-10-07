@@ -1,0 +1,35 @@
+### IntelliJ HTTP Client - click the green arrow next to a request.
+### Start the backend first (http://localhost:8080).
+
+### 1. Public: list doctors
+GET http://localhost:8080/api/doctors
+
+### 2. Log in as the demo patient (saves the token for the next requests)
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{ "email": "patient@demo.com", "password": "demo123" }
+
+> {% client.global.set("token", response.body.token); %}
+
+### 3. Who am I?
+GET http://localhost:8080/api/auth/me
+Authorization: Bearer {{token}}
+
+### 4. Taken slots for doctor 1
+GET http://localhost:8080/api/doctors/1/booked
+
+### 5. Book an appointment (change the date: it must be a weekday the doctor works, within 60 days)
+POST http://localhost:8080/api/appointments
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "doctorId": 1, "date": "2026-10-20", "time": "10:00", "reason": "Routine check-up" }
+
+### 6. My appointments
+GET http://localhost:8080/api/appointments
+Authorization: Bearer {{token}}
+
+### 7. Notifications
+GET http://localhost:8080/api/notifications
+Authorization: Bearer {{token}}
