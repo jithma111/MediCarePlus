@@ -50,4 +50,22 @@ public class User {
     public void setRole(Role role) { this.role = role; }
     public Doctor getDoctor() { return doctor; }
     public void setDoctor(Doctor doctor) { this.doctor = doctor; }
+
+    //
+    @Column(length = 30) private String phone;
+    @Column(name = "date_of_birth", length = 10) private String dateOfBirth;
+    @Column(length = 10) private String gender;
+    @Column(length = 255) private String address;
+    @Column(columnDefinition = "LONGTEXT") private String photo; // small image stored as text
+
+    public String getPhone() { return phone; }
+    public void setPhone(String v) { this.phone = v; }
+    public String getDateOfBirth() { return dateOfBirth; }
+    public void setDateOfBirth(String v) { this.dateOfBirth = v; }
+    public String getGender() { return gender; }
+    public void setGender(String v) { this.gender = v; }
+    public String getAddress() { return address; }
+    public void setAddress(String v) { this.address = v; }
+    public String getPhoto() { return photo; }
+    public void setPhoto(String v) { this.photo = v; }
 }
