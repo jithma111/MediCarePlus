@@ -88,3 +88,11 @@ footer{--card:#000;--bg:#111;--ink:#f2f2f2;--mute:#b5b5b5;--line:#2e2e2e;--blue:
 .hero::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(135deg,color-mix(in srgb,var(--teal) 70%,transparent),color-mix(in srgb,var(--card) 50%,transparent) 70%)}
 .hero .wrap{position:relative;z-index:2}
 @media(prefers-reduced-motion:reduce){.hslides span{animation:none}.hslides span:nth-child(1){opacity:1}}
+
+/* ECG heartbeat animation along the bottom of the nav bar */
+nav .wrap{position:relative;z-index:1}
+.ecg{position:absolute;left:0;bottom:0;width:100%;height:24px;color:var(--ecg,var(--blue));pointer-events:none;z-index:0;overflow:hidden}
+.ecg-base{opacity:.18}
+.ecg-pulse{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 88%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 88%,transparent 100%);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:320px 100%;mask-size:320px 100%;-webkit-mask-position:-320px 0;mask-position:-320px 0;animation:ecg-sweep 3.6s linear infinite;filter:drop-shadow(0 0 3px var(--ecg,var(--blue)))}
+@keyframes ecg-sweep{to{-webkit-mask-position:100vw 0;mask-position:100vw 0}}
+@media(prefers-reduced-motion:reduce){.ecg-pulse{animation:none;opacity:0}.ecg-base{opacity:.3}}
