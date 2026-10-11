@@ -45,7 +45,12 @@ public class User {
     public String getPasswordHash() { return passwordHash; }
     public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
     public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public void setName(String name) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Name is required.");
+        }
+        this.name = name.trim();
+    }
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
     public Doctor getDoctor() { return doctor; }
@@ -68,4 +73,21 @@ public class User {
     public void setAddress(String v) { this.address = v; }
     public String getPhoto() { return photo; }
     public void setPhoto(String v) { this.photo = v; }
+
+    /** Two users are the same if they have the same id. */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User other)) return false;
+        return id != null && id.equals(other.id);
+    }
+
+    @Override
+    public int hashCode() { return getClass().hashCode(); }
+
+    /** The password hash is never printed (information hiding). */
+    @Override
+    public String toString() {
+        return "User{id=" + id + ", email=" + email + ", role=" + role + "}";
+    }
 }

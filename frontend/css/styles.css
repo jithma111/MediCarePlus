@@ -71,14 +71,17 @@ footer{padding:40px 0 0;background:var(--card)}
 @media(max-width:900px){.fgrid{grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.fgrid{grid-template-columns:1fr}}}
 
+/*footer style*/
 footer{--card:#000;--bg:#111;--ink:#f2f2f2;--mute:#b5b5b5;--line:#2e2e2e;--blue:#a58bff;--teal:#a58bff;--tealink:#c9b8ff;--warn:#ff8a80;background:#000;color:var(--ink);border-top:1px solid #2e2e2e}
 
 .pf{display:flex;align-items:center;gap:18px;margin:12px 0}
 .pfimg{width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid var(--teal)}
 
+/*Profile */
 .pdc{max-width:360px;margin:20px auto;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px}
 .pdc h2{margin:6px 0 0}
 
+/*dash board images*/
 .hslides{position:absolute;inset:0;z-index:0}
 .hslides span{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;animation:hfade 18s infinite}
 .hslides span:nth-child(1){background-image:url("../images/hero1.jpeg")}
