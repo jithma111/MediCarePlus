@@ -99,3 +99,6 @@ nav .wrap{position:relative;z-index:1}
 .ecg-pulse{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 88%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 88%,transparent 100%);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:320px 100%;mask-size:320px 100%;-webkit-mask-position:-320px 0;mask-position:-320px 0;animation:ecg-sweep 3.6s linear infinite;filter:drop-shadow(0 0 3px var(--ecg,var(--blue)))}
 @keyframes ecg-sweep{to{-webkit-mask-position:100vw 0;mask-position:100vw 0}}
 @media(prefers-reduced-motion:reduce){.ecg-pulse{animation:none;opacity:0}.ecg-base{opacity:.3}}
+
+/*Emergency button*/
+.links a[href="#/emergency"]{color:var(--warn);font-weight:700}

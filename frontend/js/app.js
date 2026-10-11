@@ -61,7 +61,7 @@ function go(p){location.hash="#"+p}
 async function render(){const h=location.hash.slice(1)||"/",[path,qstr]=h.split("?"),qs=Object.fromEntries(new URLSearchParams(qstr||"")),p=path.split("/").filter(Boolean),pg=p[0]||"home";
 try{if(pg=="doctor")await loadBooked(p[1]);if(pg=="dashboard"||pg=="confirm")await refreshPrivate()}catch(e){toast(e.message)}
 $("#app").innerHTML=(R[pg]||R.home)(p[1],qs)||"";if(pg=="doctors")results();if(pg=="doctor"&&getDoc(p[1]))slots(p[1]);
-const u=me(),L=[["/","Home"],["/doctors","Find a doctor"],["/about","About"],["/faq","FAQ"],["/contact","Contact"]];
+const u=me(),L=[["/","Home"],["/doctors","Find a doctor"],["/about","About"],["/faq","FAQ"],["/contact","Contact"],["/emergency","Emergency"]];
 $("#lk").innerHTML=L.map(l=>`<a href="#${l[0]}" ${("/"+(p[0]||""))==l[0]?'aria-current="page"':""}>${l[1]}</a>`).join("")+(u?`<a href="#/dashboard">Dashboard</a><a href="#/profile">My profile</a><button class="alt sm" data-act="out">Log out</button>`:`<a class="btn sm" href="#/login">Log in / Register</a>`);
 bell();window.scrollTo(0,0);document.title="MediCare Plus";}
 function bell(){const u=me(),n=u?DB.notes:[],c=n.filter(x=>!x.read).length;$("#bell").innerHTML="🔔"+(c?`<b>${c}</b>`:"");$("#np").innerHTML=`<h3>Notifications</h3>`+(u?(n.slice(0,12).map(x=>`<p>${esc(x.text)}</p>`).join("")||`<p class="mute">No notifications yet.</p>`):`<p class="mute">Log in to see notifications.</p>`)}
