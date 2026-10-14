@@ -45,12 +45,3 @@ details{border-bottom:1px solid var(--line);padding:14px 0}summary{font-weight:7
 #np p{margin:0;padding:10px 0;border-top:1px solid var(--line);font-size:15px}
 #toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:12px 20px;border-radius:10px;opacity:0;pointer-events:none;z-index:20}#toast.on{opacity:1}
 footer{border-top:1px solid var(--line);padding:28px 0;color:var(--mute);font-size:15px}
-
-main.wrap:has(.authgrid){max-width:none;padding:0;margin:0}
-.authgrid{gap:0;min-height:calc(100vh - 84px)}
-@media(min-width:820px){.authgrid{grid-template-columns:1fr 1fr}.authimg{order:-1}}
-.authimg{border:0;border-radius:0;background-position:top center}
-.authgrid>.card{display:flex;flex-direction:column;justify-content:center;align-items:center;border:0;border-radius:0;padding:40px 24px}
-.authgrid>.card>*{width:100%;max-width:380px}
-.authgrid>.card h2,.authgrid>.card>p{text-align:center}
-.authgrid>.card>button{width:auto;align-self:center}
