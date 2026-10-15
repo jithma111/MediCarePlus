@@ -88,7 +88,7 @@ footer{--card:#000;--bg:#111;--ink:#f2f2f2;--mute:#b5b5b5;--line:#2e2e2e;--blue:
 .hslides span:nth-child(2){background-image:url("../images/hero2.jpeg");animation-delay:6s}
 .hslides span:nth-child(3){background-image:url("../images/hero3.png");animation-delay:12s}
 @keyframes hfade{0%{opacity:0}6%{opacity:1}33%{opacity:1}39%{opacity:0}100%{opacity:0}}
-.hero::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(135deg,color-mix(in srgb,var(--teal) 70%,transparent),color-mix(in srgb,var(--card) 50%,transparent) 70%)}
+.hero::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(135deg,color-mix(in srgb,var(--teal) 80%,transparent),color-mix(in srgb,var(--card) 20%,transparent) 20%)}
 .hero .wrap{position:relative;z-index:2}
 @media(prefers-reduced-motion:reduce){.hslides span{animation:none}.hslides span:nth-child(1){opacity:1}}
 
