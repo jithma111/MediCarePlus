@@ -19,7 +19,7 @@ public class ProfileController {
     }
 
     public record ProfileDto(String name, String email, String phone, String dateOfBirth,
-                             String gender, String address, String photo) { }
+                             String gender, String address, String photo, String medicalConditions) { }
 
     @GetMapping
     public ProfileDto get(HttpServletRequest req) {
@@ -33,19 +33,21 @@ public class ProfileController {
         String photo = b.photo() == null ? "" : b.photo();
         if (!photo.isEmpty() && (!photo.startsWith("data:image/") || photo.length() > 400_000))
             throw new ApiException(400, "Photo must be a small image.");
+        String conditions = b.medicalConditions() == null ? "" : b.medicalConditions().trim();
+        if (conditions.length() > 1000) conditions = conditions.substring(0, 1000);
         u.setName(b.name().trim());
         u.setPhone(b.phone());
         u.setDateOfBirth(b.dateOfBirth());
         u.setGender(b.gender());
         u.setAddress(b.address());
         u.setPhoto(photo);
+        u.setMedicalConditions(conditions);
         users.save(u);
         return toDto(u);
     }
 
     private ProfileDto toDto(User u) {
         return new ProfileDto(u.getName(), u.getEmail(), u.getPhone(), u.getDateOfBirth(),
-                u.getGender(), u.getAddress(), u.getPhoto());
+                u.getGender(), u.getAddress(), u.getPhoto(), u.getMedicalConditions());
     }
 }
-
