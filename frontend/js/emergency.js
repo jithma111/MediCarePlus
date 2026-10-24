@@ -188,7 +188,7 @@
         const st = STATUS[r.status] || [r.status];
         const who = staff ? `${esc(r.patient)} · ${esc(r.phone)}` : esc(st[0]);
         const act = staff
-            ? `<div class="emact">${r.status == "OPEN" ? `<button class="embtn" data-act="emst" data-id="${r.id}" data-v="IN_PROGRESS">In progress</button>` : ""}${r.status != "RESOLVED" ? `<button class="embtn go" data-act="emst" data-id="${r.id}" data-v="RESOLVED">Resolved</button>` : ""}${admin ? `<button class="embtn bad" data-act="emdel" data-id="${r.id}">Delete</button>` : ""}</div>`
+            ? `<div class="emact">${r.status == "OPEN" ? `<button class="embtn" data-act="emst" data-id="${r.id}" data-v="IN_PROGRESS">In progress</button>` : ""}${r.status != "RESOLVED" ? `<button class="embtn go" data-act="emst" data-id="${r.id}" data-v="RESOLVED">Resolved</button>` : ""}<button class="embtn" data-em="showloc" data-loc="${esc(r.location)}">Show location</button>${admin ? `<button class="embtn bad" data-act="emdel" data-id="${r.id}">Delete</>` : ""}</div>`
             : "";
         return `<div class="emreq"><span class="emdot ${sc2}"></span><div class="emreqb">
       <div class="emreqh"><b>${erId(r)}</b><span class="empill ${sc2}">${sl}</span><span class="emago">${ago(r.createdAt)}</span></div>
@@ -258,6 +258,18 @@
     }
     window.loadEm = loadEm;           // app.js calls loadEm() after send / status change / delete
 
+
+    /* ---------- show patient location on Google Maps ---------- */
+    function showLocation(loc) {
+        const m = /(-?\d{1,3}(?:\.\d+)?)\s*,\s*(-?\d{1,3}(?:\.\d+)?)/.exec(loc || "");
+        const ok = m && Math.abs(+m[1]) <= 90 && Math.abs(+m[2]) <= 180;
+        const query = ok ? m[1] + "," + m[2] : encodeURIComponent(loc || "");
+        if (!query) return toast("This request has no location.");
+        window.open("https://www.google.com/maps/search/?api=1&query=" + query, "_blank", "noopener");
+    }
+
+    /* ---------- events ---------- */
+
     /* ---------- events ---------- */
     document.addEventListener("input", e => { if (e.target.id == "emq") { EM.q = e.target.value; paintEm(); } });
 
@@ -269,6 +281,7 @@
         if (k == "all") { EM.all = !EM.all; paintEm(); }
         else if (k == "menu") { $("#emside").classList.toggle("on"); }
         else if (k == "print") { window.print(); }
+        else if (k == "showloc") { showLocation(b.dataset.loc); }
         else if (k == "geo") {
             if (!navigator.geolocation) return toast("Location is not available in this browser.");
             navigator.geolocation.getCurrentPosition(
@@ -280,3 +293,4 @@
     // keep the list fresh while the page is open
     setInterval(() => { if (location.hash.startsWith("#/emergency") && me()) loadEm(); }, 30000);
 })();
+
