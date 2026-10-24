@@ -23,9 +23,9 @@ const availDays=doc=>{const o=[];for(let k=1;o.length<10&&k<30;k++){const x=new 
 const card=d=>`<a class="card dc" style="text-decoration:none;color:inherit" href="#/doctor/${d.id}"><div class="av">${ini(d.n)}</div><div><h3>${esc(d.n)}</h3><span class="tag">${esc(d.s)}</span><div class="mute">${esc(d.h)} · ${d.y} yrs experience</div></div></a>`;
 let B={date:null,time:null,rid:null},Q="",SP="All";
 const R={};
-R.home=()=>`<header class="hero"><div class="hslides"><span></span><span></span><span></span></div><div class="wrap"><div><h1>Your Health, Our Priority</h1><p>Find the right doctor and book your medical appointment quickly and easily.</p>
+R.home=()=>`<header class="hero"><div class="hslides"><span></span><span></span><span></span><span></span></div><div class="wrap"><div><h1>Your Health, Our Priority</h1><p>Find the right doctor and book your medical appointment quickly and easily.</p>
 <div class="row"><a class="btn" href="#/doctors">Book an Appointment</a><a class="btn alt" href="#/doctors">Find a Doctor</a></div></div>
-<svg viewBox="0 0 400 320" role="img" aria-label="Illustration of a doctor's appointment card" style="width:100%;max-width:420px;justify-self:center"><circle cx="200" cy="160" r="140" fill="var(--teal)"/><rect x="90" y="70" width="220" height="180" rx="22" fill="var(--card)" stroke="var(--line)" stroke-width="3"/><circle cx="150" cy="125" r="28" fill="#1565c0"/><path d="M142 110h16v10h10v16h-10v10h-16v-10h-10v-16h10z" fill="#fff"/><rect x="195" y="108" width="85" height="12" rx="6" fill="var(--line)"/><rect x="195" y="130" width="60" height="12" rx="6" fill="var(--line)"/><rect x="115" y="175" width="170" height="14" rx="7" fill="var(--teal)"/><rect x="115" y="200" width="60" height="30" rx="10" fill="#1565c0"/><rect x="185" y="200" width="60" height="30" rx="10" fill="var(--teal)"/></svg></div></header>
+</div></header>
 <section class="s stats-s"><div class="wrap"><div class="stats" role="list">
 <div class="stat card" role="listitem"><div class="ic" aria-hidden="true">🧑‍🤝‍🧑</div><div class="num"><span class="count" data-to="12500">0</span>+</div><p class="mute">Patients</p></div>
 <div class="stat card" role="listitem"><div class="ic" aria-hidden="true">🩺</div><div class="num"><span class="count" data-to="350">0</span>+</div><p class="mute">Doctors</p></div>

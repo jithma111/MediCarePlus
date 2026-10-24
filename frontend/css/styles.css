@@ -83,11 +83,12 @@ footer{--card:#000;--bg:#111;--ink:#f2f2f2;--mute:#b5b5b5;--line:#2e2e2e;--blue:
 
 /*dash board images*/
 .hslides{position:absolute;inset:0;z-index:0}
-.hslides span{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;animation:hfade 18s infinite}
+.hslides span{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;animation:hfade 24s infinite}
 .hslides span:nth-child(1){background-image:url("../images/hero1.jpeg")}
 .hslides span:nth-child(2){background-image:url("../images/hero2.jpeg");animation-delay:6s}
 .hslides span:nth-child(3){background-image:url("../images/hero3.png");animation-delay:12s}
-@keyframes hfade{0%{opacity:0}6%{opacity:1}33%{opacity:1}39%{opacity:0}100%{opacity:0}}
+.hslides span:nth-child(4){background-image:url("../images/hero4.png");animation-delay:18s}
+@keyframes hfade{0%{opacity:0}4%{opacity:1}25%{opacity:1}29%{opacity:0}100%{opacity:0}}
 .hero::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(135deg,color-mix(in srgb,var(--teal) 80%,transparent),color-mix(in srgb,var(--card) 20%,transparent) 20%)}
 .hero .wrap{position:relative;z-index:2}
 @media(prefers-reduced-motion:reduce){.hslides span{animation:none}.hslides span:nth-child(1){opacity:1}}
@@ -310,3 +311,29 @@ footer{margin-top:120px}
 .cb-teaser-x:hover{background:var(--bg)}
 @keyframes cbpop{0%{opacity:0;transform:translateY(10px) scale(.95)}100%{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){.cb-teaser{animation:none}}
+
+.adwrap{max-width:1600px}
+.adshell{display:grid;gap:18px}
+@media(min-width:1100px){.adshell{grid-template-columns:230px minmax(0,1fr);align-items:start}.adside{position:sticky;top:96px;min-height:calc(100vh - 140px)}}
+.adside{background:linear-gradient(180deg,#0a2a5e,#0b3a82);color:#fff;border-radius:18px;padding:18px 12px;display:flex;flex-direction:column;gap:14px;overflow:hidden}
+.adlogo{display:flex;gap:10px;align-items:center;padding:0 8px 8px}.adlogo span{font-size:30px}.adlogo small{display:block;color:#9fc3f0;font-size:11px}
+.adside nav{display:flex;flex-direction:column;gap:4px}
+.adnav{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:12px;text-decoration:none;color:#dbeafe;font-weight:600}
+.adnav:hover{background:#ffffff1a}.adnav.on{background:#2f7fe8;color:#fff}
+.adbadge{margin-left:auto;background:#6366f1;color:#fff;border-radius:999px;font-size:12px;padding:1px 8px}
+.adfoot{margin-top:auto;min-height:220px;background:linear-gradient(180deg,#0b3a82 0%,transparent 40%),url("../images/about-doctor.jpg") center bottom/cover no-repeat;border-radius:14px}
+@media(max-width:1099px){.adside nav{flex-direction:row;overflow-x:auto}.adnav{white-space:nowrap}.adfoot{display:none}}
+.admain{min-width:0}
+.adtop{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:16px}.adtop input{max-width:460px;border-radius:999px}
+.adbody{display:grid;gap:16px}
+@media(min-width:1250px){.adbody{grid-template-columns:minmax(0,1fr) 320px}}
+.adc,.adr{display:grid;gap:16px;align-content:start;min-width:0}
+.adhello{display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,var(--teal),var(--card))}.adart{font-size:70px}
+.adqs{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.adq{display:flex;gap:12px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:14px;text-decoration:none;color:inherit}.adq b{font-size:24px}
+.adqa{display:flex;gap:12px;align-items:center;padding:16px;border-radius:16px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;text-decoration:none}.adqa div{flex:1}.adqa small{display:block;opacity:.85}
+.adtd{display:flex;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.adinfo{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin:10px 0}.adinfo span{display:block;font-size:12px}
+
+.hero{min-height:clamp(440px,68vh,680px);display:flex;align-items:center}
+.hero .wrap{width:100%}
