@@ -293,4 +293,3 @@
     // keep the list fresh while the page is open
     setInterval(() => { if (location.hash.startsWith("#/emergency") && me()) loadEm(); }, 30000);
 })();
-
