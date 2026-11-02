@@ -52,6 +52,11 @@ public class DataSeeder implements CommandLineRunner {
         if (!users.existsByEmailIgnoreCase("admin@demo.com")) {
             users.save(new User("admin@demo.com", encoder.encode("admin123"), "Administrator", Role.ADMIN, null));
         }
+
+        if (!users.existsByEmailIgnoreCase("driver@demo.com")) {
+            users.save(new User("driver@demo.com", encoder.encode("demo123"), "Kasun Perera", Role.DRIVER, null));
+        }
+
         if (!users.existsByEmailIgnoreCase("patient@demo.com")) {
             users.save(new User("patient@demo.com", encoder.encode("demo123"), "Demo Patient", Role.PATIENT, null));
         }

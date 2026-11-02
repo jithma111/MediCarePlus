@@ -3,7 +3,7 @@
 // Sample data: ambulances, hospital beds and the map. The backend has no tables for these yet,
 //              so they are fixed demo values defined below. Replace them when you add the endpoints.
 (() => {
-    const EM = { rows: [], q: "", all: false };
+    const EM = { rows: [], q: "", all: false, geo: null };
 
     /* ---------- sample data (no backend support yet) ---------- */
     const AMBULANCES = [
@@ -95,6 +95,7 @@
     R.emergency = () => {
         const u = me();
         if (!u) return go("/login?next=/emergency");
+        if (u.role == "driver") return go("/driver");
         setTimeout(loadEm, 0);
         const staff = u.role != "patient";
 
@@ -188,13 +189,13 @@
         const st = STATUS[r.status] || [r.status];
         const who = staff ? `${esc(r.patient)} · ${esc(r.phone)}` : esc(st[0]);
         const act = staff
-            ? `<div class="emact">${r.status == "OPEN" ? `<button class="embtn" data-act="emst" data-id="${r.id}" data-v="IN_PROGRESS">In progress</button>` : ""}${r.status != "RESOLVED" ? `<button class="embtn go" data-act="emst" data-id="${r.id}" data-v="RESOLVED">Resolved</button>` : ""}<button class="embtn" data-em="showloc" data-loc="${esc(r.location)}">Show location</button>${admin ? `<button class="embtn bad" data-act="emdel" data-id="${r.id}">Delete</>` : ""}</div>`
+            ? `<div class="emact">${r.status == "OPEN" ? `<button class="embtn" data-act="emst" data-id="${r.id}" data-v="IN_PROGRESS">In progress</button>` : ""}${r.status != "RESOLVED" ? `<button class="embtn go" data-act="emst" data-id="${r.id}" data-v="RESOLVED">Resolved</button>` : ""}<button class="embtn" data-em="showloc" data-loc="${esc(r.location)}" data-lat="${r.latitude ?? ""}" data-lng="${r.longitude ?? ""}">Show location</button> ${admin ? `<button class="embtn bad" data-act="emdel" data-id="${r.id}">Delete</button>` : ""}</div>`
             : "";
         return `<div class="emreq"><span class="emdot ${sc2}"></span><div class="emreqb">
       <div class="emreqh"><b>${erId(r)}</b><span class="empill ${sc2}">${sl}</span><span class="emago">${ago(r.createdAt)}</span></div>
       <div class="emloc">${esc(r.location)}</div>
       <div class="emdesc">${esc(trunc(r.description, 44))}${staff ? " • " + who : ""}</div>
-      <div class="emdesc">Respond within ${r.targetMinutes} min${r.status != "OPEN" ? " · " + esc(st[0]) : ""}</div>${act}</div></div>`;
+      <div class="emdesc">Respond within ${r.targetMinutes} min${r.status != "OPEN" ? " · " + esc(st[0]) : ""}</div>${r.driver ? `<div class="emdesc">🚑 ${esc(r.driver)} · ${STAGE_LABEL[r.stage] || "Assigned"}</div>` : ""}${act}</div></div>`;
     }
 
     function paintEm() {
@@ -260,7 +261,28 @@
 
 
     /* ---------- show patient location on Google Maps ---------- */
-    function showLocation(loc) {
+    window.emCoords = async () => {
+        const text = (($("#el") || {}).value || "").trim();
+        if (EM.geo && EM.geo.text === text) return { latitude: EM.geo.lat, longitude: EM.geo.lng };
+        const g = await MCGeo.geocode(text);
+        return g ? { latitude: g.lat, longitude: g.lng } : {};
+    };
+
+
+    window.emCoords = async () => {
+        const text = (($("#el") || {}).value || "").trim();
+        if (EM.geo && EM.geo.text === text) return { latitude: EM.geo.lat, longitude: EM.geo.lng };
+        const g = await MCGeo.geocode(text);
+        return g ? { latitude: g.lat, longitude: g.lng } : {};
+    };
+    const STAGE_LABEL = { ASSIGNED: "Ambulance assigned", ON_ROUTE: "Ambulance on its way", ARRIVED: "Ambulance has arrived", AT_HOSPITAL: "At hospital" };
+
+
+    function showLocation(loc, lat, lng) {
+        if (lat !== undefined && lat !== "" && lng !== undefined && lng !== "") {
+            window.open("https://www.google.com/maps/search/?api=1&query=" + lat + "," + lng, "_blank", "noopener");
+            return;
+        }
         const m = /(-?\d{1,3}(?:\.\d+)?)\s*,\s*(-?\d{1,3}(?:\.\d+)?)/.exec(loc || "");
         const ok = m && Math.abs(+m[1]) <= 90 && Math.abs(+m[2]) <= 180;
         const query = ok ? m[1] + "," + m[2] : encodeURIComponent(loc || "");
@@ -281,11 +303,15 @@
         if (k == "all") { EM.all = !EM.all; paintEm(); }
         else if (k == "menu") { $("#emside").classList.toggle("on"); }
         else if (k == "print") { window.print(); }
-        else if (k == "showloc") { showLocation(b.dataset.loc); }
+        else if (k == "showloc") { showLocation(b.dataset.loc, b.dataset.lat, b.dataset.lng); }
         else if (k == "geo") {
             if (!navigator.geolocation) return toast("Location is not available in this browser.");
             navigator.geolocation.getCurrentPosition(
-                p => { $("#el").value = p.coords.latitude.toFixed(5) + ", " + p.coords.longitude.toFixed(5); },
+                p => {
+                    const text = p.coords.latitude.toFixed(5) + ", " + p.coords.longitude.toFixed(5);
+                    $("#el").value = text;
+                    EM.geo = { text, lat: p.coords.latitude, lng: p.coords.longitude };
+                },
                 () => toast("Could not get your location. Please type it in."));
         }
     });
