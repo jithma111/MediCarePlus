@@ -11,8 +11,8 @@ async function loadDocs(){DB.docs=(await API.get("/doctors")).map(mapDoc)}
 async function loadBooked(id){try{DB.booked=await API.get("/doctors/"+id+"/booked")}catch(e){DB.booked=[]}}
 async function loadNotes(){DB.notes=await API.get("/notifications")}
 async function refreshPrivate(){const u=me();if(!u)return;
-const [ap,nt]=await Promise.all([API.get("/appointments"),API.get("/notifications")]);
-DB.appts=ap.map(mapAppt);DB.notes=nt;if(u.role=="admin")DB.stats=await API.get("/admin/stats")}
+    const [ap,nt]=await Promise.all([API.get("/appointments"),API.get("/notifications")]);
+    DB.appts=ap.map(mapAppt);DB.notes=nt;if(u.role=="admin")DB.stats=await API.get("/admin/stats")}
 API.onUnauthorized=()=>{DB.me=null;DB.appts=[];DB.notes=[]};
 const iso=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 const fmt=d=>new Date(d+"T00:00").toLocaleDateString("en",{weekday:"short",day:"numeric",month:"short",year:"numeric"});
@@ -70,7 +70,7 @@ R.doctors=()=>{const sp=["All",...new Set(docs().map(d=>d.s))];return `<main cla
 function results(){const q=Q.toLowerCase(),L=docs().filter(d=>(SP=="All"||d.s==SP)&&(d.n+d.s+d.h).toLowerCase().includes(q));$("#res").innerHTML=L.length?L.map(card).join(""):`<p class="mute">No doctors match your search. Try a different name or specialty.</p>`;const rc=$("#rc");if(rc)rc.textContent=L.length+(L.length==1?" doctor":" doctors")+" found";revealCards()}
 
 R.doctor=(id,qs)=>{const d=getDoc(id);if(!d)return R.doctors();B={date:null,time:null,rid:qs.r||null};const ds=availDays(d);B.date=ds[0];const u=me();
-return `<main class="wrap s"><div class="split"><div class="card"><div class="dc"><div class="av" style="width:72px;height:72px;font-size:24px">${ini(d.n)}</div><div><h1 style="font-size:28px;margin:0">${esc(d.n)}</h1><span class="tag">${esc(d.s)}</span></div></div>
+    return `<main class="wrap s"><div class="split"><div class="card"><div class="dc"><div class="av" style="width:72px;height:72px;font-size:24px">${ini(d.n)}</div><div><h1 style="font-size:28px;margin:0">${esc(d.n)}</h1><span class="tag">${esc(d.s)}</span></div></div>
 <p>${esc(d.b)}</p><h3>Qualifications</h3><p>${esc(d.q)}</p><h3>Experience</h3><p>${d.y} years</p><h3>Hospital</h3><p>${esc(d.h)}</p><h3>Availability</h3><p>${d.d.map(n=>["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][n]).join(", ")}, 09:00–17:00</p></div>
 <div class="card"><h2>${B.rid?"Reschedule":"Book"} an appointment</h2><label>Date</label><div class="days" id="days">${ds.map(x=>`<button class="alt" aria-pressed="${x==B.date}" data-dt="${x}">${new Date(x+"T00:00").toLocaleDateString("en",{weekday:"short",month:"short",day:"numeric"})}</button>`).join("")}</div><label>Time</label><div class="slots" id="slots"></div>
 ${B.rid?"":`<label for="rs">Reason for visit</label><select id="rs"><option>New concern</option><option>Follow-up</option><option>Routine check-up</option><option>Test results</option></select>`}
@@ -82,7 +82,7 @@ R.register=()=>`<main class="authpage"><div class="authgrid"><div class="card"><
 const badge=a=>`<span class="tag ${a.status}">${a.status}</span>`;
 R.dashboard=()=>{const u=me();if(!u)return go("/login?next=/dashboard");if(u.role=="driver")return go("/driver");if(u.role=="admin")return admin();if(u.role=="patient")setTimeout(loadDash,0);const doc=u.role=="doctor",all=DB.appts.filter(a=>doc?a.docId==u.docId:a.email==u.email).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)),today=iso(new Date());
     if(doc)setTimeout(loadDocSide,0);const up=all.filter(a=>a.date>=today&&["Pending","Confirmed"].includes(a.status)),prev=all.filter(a=>!up.includes(a));
-const row=a=>`<div class="appt"><div><b>${esc(doc?a.patient:a.docName)}</b><div class="mute">${fmt(a.date)} at ${a.time} · ${esc(a.reason)}</div>${doc?`<details style="margin-top:6px"><summary style="cursor:pointer;color:#2563eb;font-weight:600">Patient details &amp; medical condition</summary><div class="mute" style="margin-top:6px;line-height:1.7"><b>Medical condition:</b> ${esc(a.cond||"Not provided")}<br><b>Phone:</b> ${esc(a.phone||"-")} · <b>Gender:</b> ${esc(a.gender||"-")} · <b>Date of birth:</b> ${esc(a.dob||"-")}<br><b>Email:</b> ${esc(a.email)}</div></details>`:""}</div><div class="row" style="margin:0;align-items:center">${badge(a)}${a.status=="Pending"&&doc?`<button class="sm" data-act="st" data-id="${a.id}" data-v="Confirmed">Confirm</button>`:""}${a.status=="Confirmed"&&doc?`<button class="sm" data-act="st" data-id="${a.id}" data-v="Completed">Mark completed</button>`:""}${["Pending","Confirmed"].includes(a.status)?`${doc?"":`<a class="btn alt sm" href="#/doctor/${a.docId}?r=${a.id}">Reschedule</a>`}<button class="sm bad" data-act="st" data-id="${a.id}" data-v="Cancelled">Cancel</button>`:""}</div></div>`;
+    const row=a=>`<div class="appt"><div><b>${esc(doc?a.patient:a.docName)}</b><div class="mute">${fmt(a.date)} at ${a.time} · ${esc(a.reason)}</div>${doc?`<details style="margin-top:6px"><summary style="cursor:pointer;color:#2563eb;font-weight:600">Patient details &amp; medical condition</summary><div class="mute" style="margin-top:6px;line-height:1.7"><b>Medical condition:</b> ${esc(a.cond||"Not provided")}<br><b>Phone:</b> ${esc(a.phone||"-")} · <b>Gender:</b> ${esc(a.gender||"-")} · <b>Date of birth:</b> ${esc(a.dob||"-")}<br><b>Email:</b> ${esc(a.email)}</div></details>`:""}</div><div class="row" style="margin:0;align-items:center">${badge(a)}${a.status=="Pending"&&doc?`<button class="sm" data-act="st" data-id="${a.id}" data-v="Confirmed">Confirm</button>`:""}${a.status=="Confirmed"&&doc?`<button class="sm" data-act="st" data-id="${a.id}" data-v="Completed">Mark completed</button>`:""}${["Pending","Confirmed"].includes(a.status)?`${doc?"":`<a class="btn alt sm" href="#/doctor/${a.docId}?r=${a.id}">Reschedule</a>`}<button class="sm bad" data-act="st" data-id="${a.id}" data-v="Cancelled">Cancel</button>`:""}</div></div>`;
     return doc?doctorDash(all,up,u):patientDash(all,up,u);return `<main class="wrap s">${doc?`<div class="dbanner">`:""}<h1 style="font-size:34px;text-align:${doc?"center":"left"}">${doc?"Doctor":"Patient"} dashboard</h1><p class="mute" style="${doc?"text-align:center;font-size:20px;font-weight:600":""}">${doc?`Welcome, ${/^dr\.?\s/i.test(u.name)?"":"Dr. "}${esc(u.name)}`:`Signed in as ${esc(u.name)}`}</p>${doc?"</div>":""}${doc?"":`<div class="dlay"><div class="card pdc dside" id="pdc"><div class="av" id="dav" style="width:96px;height:96px;font-size:34px">${ini(u.name)}</div><img id="dimg" class="pfimg" alt="Profile photo" style="display:none"><h2 id="dnm">${esc(u.name)}</h2><p class="mute" id="dinfo"></p><a class="btn alt sm" href="#/profile">Edit profile</a></div><div class="card" id="pmc"><h2>Medical conditions</h2><div id="pmlist"><p class="mute">Loading...</p></div><a class="btn alt sm" href="#/profile" style="margin-top:12px">Update conditions</a></div></div>`}${doc?"":`<a class="btn" href="#/doctors">Book a new appointment</a>`}${doc?`<div class="dlay"><aside class="card dside"><img id="dpimg" class="pfimg" alt="Doctor photo" style="display:none"><div class="av" id="dpav" style="width:110px;height:110px;font-size:40px">${ini(u.name)}</div><h2 style="margin:8px 0 0">${esc(u.name)}</h2>${(d=>d?`<p><b>${esc(d.s)}</b></p><p class="mute">${esc(d.h)}<br>${d.y} years experience</p>`:"")(getDoc(u.docId))}<p class="mute" id="dpage"></p><a class="btn alt sm" href="#/profile">Edit profile</a></aside><div class="dmain">`:""}<div class="card" style="margin-top:20px"><h2>${doc?"Scheduled appointments":"Upcoming appointments"}</h2>${up.map(row).join("")||`<p class="mute">Nothing scheduled${doc?"":". Find a doctor to book your first visit"}.</p>`}</div><div class="card" style="margin-top:20px"><h2>Previous and cancelled</h2>${prev.map(row).join("")||`<p class="mute">No past appointments yet.</p>`}</div>${doc?"</div></div>":""}${u.role=="admin"?"":`<details class="card" style="margin-top:20px"><summary style="cursor:pointer;font-weight:700;color:var(--warn)">Delete my account</summary><p class="mute" style="margin-top:12px">This permanently removes your account${u.role=="patient"?" and your appointments":""}. Enter your password to confirm.</p><label for="dp">Password</label><input id="dp" type="password" autocomplete="current-password"><p class="err" id="e8" role="alert"></p><button class="bad" data-act="delme">Delete my account</button></details>`}</main>`};
 R.about=()=>{const D=docs(),hs=new Set(D.map(d=>d.h)).size,sp=new Set(D.map(d=>d.s)).size;
     const mc=(ic,c,t,p)=>`<div class="abm" style="background:${c}14"><div class="pdi" style="background:${c}30">${ic}</div><div><b>${t}</b><p class="mute">${p}</p></div></div>`;
@@ -136,22 +136,22 @@ function animateCounts(){
     const io=new IntersectionObserver((en,o)=>en.forEach(x=>{if(x.isIntersecting){run(x.target);o.unobserve(x.target)}}),{threshold:.4});
     els.forEach(el=>io.observe(el));
 }async function render(){const h=location.hash.slice(1)||"/",[path,qstr]=h.split("?"),qs=Object.fromEntries(new URLSearchParams(qstr||"")),p=path.split("/").filter(Boolean),pg=p[0]||"home";
-try{if(pg=="doctor")await loadBooked(p[1]);if(pg=="dashboard"||pg=="confirm")await refreshPrivate()}catch(e){toast(e.message)}
+    try{if(pg=="doctor")await loadBooked(p[1]);if(pg=="dashboard"||pg=="confirm")await refreshPrivate()}catch(e){toast(e.message)}
     document.body.classList.toggle("em-mode",pg=="emergency");document.body.classList.toggle("dv-mode",pg=="driver");$("#app").innerHTML=(R[pg]||R.home)(p[1],qs)||"";animateCounts();revealCards();if(pg=="doctors")results();if(pg=="doctor"&&getDoc(p[1]))slots(p[1]);
-const u=me(),L=[["/","Home"],["/doctors","Find a doctor"],["/about","About"],["/faq","FAQ"],["/contact","Contact"],["/emergency","Emergency"]];
-$("#lk").innerHTML=L.map(l=>`<a href="#${l[0]}" ${("/"+(p[0]||""))==l[0]?'aria-current="page"':""}>${l[1]}</a>`).join("")+(u?`<a href="#/dashboard">Dashboard</a><a href="#/profile">My profile</a>${u.role=="patient"?`<a href="#/messages">My messages</a>`:""}${u.role=="admin"?`<a href="#/inbox">Inbox</a>`:""}<button class="alt sm" data-act="out">Log out</button>`:`<a class="btn sm" href="#/login">Log in / Register</a>`);
-bell();window.scrollTo(0,0);document.title="MediCare Plus";}
+    const u=me(),L=[["/","Home"],["/doctors","Find a doctor"],["/about","About"],["/faq","FAQ"],["/contact","Contact"],["/emergency","Emergency"]];
+    $("#lk").innerHTML=L.map(l=>`<a href="#${l[0]}" ${("/"+(p[0]||""))==l[0]?'aria-current="page"':""}>${l[1]}</a>`).join("")+(u?`<a href="#/dashboard">Dashboard</a><a href="#/profile">My profile</a>${u.role=="patient"?`<a href="#/messages">My messages</a>`:""}${u.role=="admin"?`<a href="#/inbox">Inbox</a>`:""}<button class="alt sm" data-act="out">Log out</button>`:`<a class="btn sm" href="#/login">Log in / Register</a>`);
+    bell();window.scrollTo(0,0);document.title="MediCare Plus";}
 function bell(){const u=me(),n=u?DB.notes:[],c=n.filter(x=>!x.read).length;$("#bell").innerHTML="🔔"+(c?`<b>${c}</b>`:"");$("#np").innerHTML=`<h3>Notifications</h3>`+(u?(n.slice(0,12).map(x=>`<p>${esc(x.text)}</p>`).join("")||`<p class="mute">No notifications yet.</p>`):`<p class="mute">Log in to see notifications.</p>`)}
 const nav=p=>{if((location.hash||"#/")=="#"+p)render();else go(p)};
 document.addEventListener("input",e=>{if(e.target.id=="q"){Q=e.target.value;results()}});
 document.addEventListener("click",e=>{const b=e.target.closest("button");if(!b){if(!e.target.closest("#np"))$("#np").classList.remove("on");return}
-const id=location.hash.split("/")[2]?.split("?")[0];
-if(b.id=="mb"){const o=$("#lk").classList.toggle("on");b.setAttribute("aria-expanded",o)}
-else if(b.id=="bell"){const open=$("#np").classList.toggle("on");if(me()&&open)openNotes()}
-else if(b.dataset.sp){SP=b.dataset.sp;render()}
-else if(b.dataset.dt){B.date=b.dataset.dt;B.time=null;slots(id)}
-else if(b.dataset.tm){B.time=b.dataset.tm;slots(id)}
-else if(b.dataset.act)act(b)});
+    const id=location.hash.split("/")[2]?.split("?")[0];
+    if(b.id=="mb"){const o=$("#lk").classList.toggle("on");b.setAttribute("aria-expanded",o)}
+    else if(b.id=="bell"){const open=$("#np").classList.toggle("on");if(me()&&open)openNotes()}
+    else if(b.dataset.sp){SP=b.dataset.sp;render()}
+    else if(b.dataset.dt){B.date=b.dataset.dt;B.time=null;slots(id)}
+    else if(b.dataset.tm){B.time=b.dataset.tm;slots(id)}
+    else if(b.dataset.act)act(b)});
 async function openNotes(){try{await loadNotes();bell();await API.post("/notifications/read");DB.notes.forEach(n=>n.read=true);$("#bell").innerHTML="🔔"}catch(e){toast(e.message)}}
 const ERR={login:"#e1",reg:"#e2",book:"#err",adddoc:"#e4",msg:"#e3",saveprofile:"#e5",sendem:"#e6",adduser:"#e7",addpatient:"#e9",delme:"#e8"};
 const EMAIL=/^\S+@\S+\.\S+$/;
@@ -193,38 +193,38 @@ async function loadInbox(){if(!$("#ilist"))return;try{const rows=await API.get("
 <details class="card" id="acct" style="margin-top:20px"><summary style="cursor:pointer;font-weight:700;color:var(--warn)">Delete my account</summary><p class="mute" style="margin-top:12px">This permanently removes your account and your appointments. Enter your password to confirm.</p><label for="dp">Password</label><input id="dp" type="password" autocomplete="current-password"><p class="err" id="e8" role="alert"></p><button class="bad" data-act="delme">Delete my account</button></details></div></div></main>`}
 async function loadPD(){try{const p=await API.get("/profile");if(!$("#pdq"))return;const mc=(p.medicalConditions||"").split(/[,\n]/).map(s=>s.trim()).filter(Boolean);$("#pmlist").innerHTML=mc.length?mc.map(c=>`<span class="cond">${esc(c)}</span>`).join(""):`<p class="mute">No conditions added yet. Add them in My profile.</p>`;$("#pdcount").textContent=mc.length;if(p.photo){$("#pdimg").src=p.photo;$("#pdimg").style.display="block";$("#pdav").style.display="none"}}catch(e){}}
 document.addEventListener("keydown",e=>{if(e.target.id=="pdq"&&e.key=="Enter"){Q=e.target.value;nav("/doctors")}});document.addEventListener("click",e=>{const l=e.target.closest("a[data-scroll]");if(!l)return;e.preventDefault();const t=document.getElementById(l.dataset.scroll);if(t){t.scrollIntoView({behavior:"smooth",block:"start"});if(t.tagName=="DETAILS")t.open=true}});async function act(b){const a=b.dataset.act,u=me(),fail=m=>{const el=ERR[a]&&$(ERR[a]);el?el.textContent=m:toast(m)};
-try{
-if(a=="out"){await API.post("/auth/logout").catch(()=>{});API.setToken(null);DB.me=null;DB.appts=[];DB.notes=[];nav("/");toast("Logged out")}
-else if(a=="login"){const r=await API.post("/auth/login",{email:$("#le").value.trim().toLowerCase(),password:$("#lp").value});
-API.setToken(r.token);DB.me=mapUser(r.user);await refreshPrivate();nav(b.dataset.next||"/dashboard");toast("Welcome back, "+DB.me.name)}
+    try{
+        if(a=="out"){await API.post("/auth/logout").catch(()=>{});API.setToken(null);DB.me=null;DB.appts=[];DB.notes=[];nav("/");toast("Logged out")}
+        else if(a=="login"){const r=await API.post("/auth/login",{email:$("#le").value.trim().toLowerCase(),password:$("#lp").value});
+            API.setToken(r.token);DB.me=mapUser(r.user);await refreshPrivate();nav(b.dataset.next||"/dashboard");toast("Welcome back, "+DB.me.name)}
 
-else if(a=="saveprofile"){PF=await API.put("/profile",{name:$("#pn").value.trim(),phone:$("#pp").value.trim(),dateOfBirth:$("#pd").value,gender:$("#pg").value,address:$("#pa").value.trim(),medicalConditions:$("#pm").value.trim(),photo:PF.photo||""});toast("Profile saved")}else if(a=="sendem"){const g=await emCoords();await API.post("/emergencies",{phone:$("#ep").value.trim(),location:$("#el").value.trim(),description:$("#ed").value.trim(),severity:$("#es").value,latitude:g.latitude,longitude:g.longitude});toast("Emergency request sent");$("#ep").value="";$("#el").value="";$("#ed").value="";loadEm()}
-else if(a=="emst"){await API.put("/emergencies/"+b.dataset.id+"/status",{status:b.dataset.v});loadEm()}
-else if(a=="emdel"){await API.del("/emergencies/"+b.dataset.id);loadEm()}else if(a=="msgsave"){await API.put("/contact/"+b.dataset.id,{message:$("#mt"+b.dataset.id).value.trim()});toast("Message updated");loadMsgs()}
-else if(a=="msgdel"){if(!b.dataset.sure){b.dataset.sure=1;b.textContent="Tap again to confirm";return}await API.del("/contact/"+b.dataset.id);toast("Message deleted");loadMsgs()}
-else if(a=="msgread"){await API.put("/admin/messages/"+b.dataset.id+"/read",{});loadInbox()}
-else if(a=="msgrm"){if(!b.dataset.sure){b.dataset.sure=1;b.textContent="Tap again to confirm";return}await API.del("/admin/messages/"+b.dataset.id);toast("Message deleted");loadInbox()}else if(a=="reg"){const n=$("#rn").value.trim(),em=$("#re").value.trim().toLowerCase(),pw=$("#rp").value;
+        else if(a=="saveprofile"){PF=await API.put("/profile",{name:$("#pn").value.trim(),phone:$("#pp").value.trim(),dateOfBirth:$("#pd").value,gender:$("#pg").value,address:$("#pa").value.trim(),medicalConditions:$("#pm").value.trim(),photo:PF.photo||""});toast("Profile saved")}else if(a=="sendem"){const g=await emCoords();await API.post("/emergencies",{phone:$("#ep").value.trim(),location:$("#el").value.trim(),description:$("#ed").value.trim(),severity:$("#es").value,latitude:g.latitude,longitude:g.longitude});toast("Emergency request sent");$("#ep").value="";$("#el").value="";$("#ed").value="";loadEm()}
+        else if(a=="emst"){await API.put("/emergencies/"+b.dataset.id+"/status",{status:b.dataset.v});loadEm()}
+        else if(a=="emdel"){await API.del("/emergencies/"+b.dataset.id);loadEm()}else if(a=="msgsave"){await API.put("/contact/"+b.dataset.id,{message:$("#mt"+b.dataset.id).value.trim()});toast("Message updated");loadMsgs()}
+        else if(a=="msgdel"){if(!b.dataset.sure){b.dataset.sure=1;b.textContent="Tap again to confirm";return}await API.del("/contact/"+b.dataset.id);toast("Message deleted");loadMsgs()}
+        else if(a=="msgread"){await API.put("/admin/messages/"+b.dataset.id+"/read",{});loadInbox()}
+        else if(a=="msgrm"){if(!b.dataset.sure){b.dataset.sure=1;b.textContent="Tap again to confirm";return}await API.del("/admin/messages/"+b.dataset.id);toast("Message deleted");loadInbox()}else if(a=="reg"){const n=$("#rn").value.trim(),em=$("#re").value.trim().toLowerCase(),pw=$("#rp").value;
 
-if(!n||!EMAIL.test(em))return fail("Enter your name and a valid email.");if(pw.length<6)return fail("Password must be at least 6 characters.");
-const r=await API.post("/auth/register",{name:n,email:em,password:pw});API.setToken(r.token);DB.me=mapUser(r.user);await refreshPrivate();nav("/dashboard");toast("Account created")}
-else if(a=="book"){if(!u||u.role!="patient"){go("/login?next=/doctor/"+b.dataset.id);return toast("Log in as a patient to book")}
-if(!B.time)return fail("Choose a time slot.");
-const x=mapAppt(B.rid?await API.put("/appointments/"+B.rid+"/reschedule",{date:B.date,time:B.time}):await API.post("/appointments",{doctorId:+b.dataset.id,date:B.date,time:B.time,reason:$("#rs").value}));
-await refreshPrivate();nav("/confirm/"+x.id)}
-else if(a=="st"){const x=await API.patch("/appointments/"+b.dataset.id+"/status",{status:b.dataset.v});await refreshPrivate();render();toast("Appointment "+x.status.toLowerCase())}
-else if(a=="adddoc"){const g=i=>$(i).value.trim(),days=[...document.querySelectorAll(".dyc:checked")].map(c=>+c.value),em=g("#ae").toLowerCase();
-if(!g("#an")||!g("#asp")||!g("#ah"))return fail("Enter the doctor's name, specialty and hospital.");if(!days.length)return fail("Select at least one available day.");
-if(!EMAIL.test(em))return fail("Enter a valid login email.");if($("#apw").value.length<6)return fail("Password must be at least 6 characters.");
-const n=g("#an"),d=await API.post("/doctors",{name:n.startsWith("Dr.")?n:"Dr. "+n,specialty:g("#asp"),hospital:g("#ah"),yearsExperience:+g("#ay")||0,qualifications:g("#aq"),bio:g("#ab"),availableDays:days,email:em,password:$("#apw").value});
-await loadDocs();await refreshPrivate();render();toast(d.name+" added")}
-else if(a=="addpatient"){const g=i=>$(i).value.trim();if(!g("#pn")||!EMAIL.test(g("#pe").toLowerCase()))return fail("Enter the patient's name and a valid email.");if($("#pw").value.length<6)return fail("Password must be at least 6 characters.");
-    const r=await API.post("/admin/patients",{name:g("#pn"),email:g("#pe").toLowerCase(),password:$("#pw").value,phone:g("#pp"),dateOfBirth:$("#pd").value,gender:$("#pg").value,address:g("#pa"),medicalConditions:g("#pm")});await refreshPrivate();render();toast(r.name+" added")}
-else if(a=="rmdoc"){if(!b.dataset.sure){b.dataset.sure=1;b.textContent="Tap again to confirm";return}
-await API.del("/doctors/"+b.dataset.id);await loadDocs();await refreshPrivate();render();toast("Doctor removed")}
-else if(a=="msg"){if(!$("#cn").value.trim()||!EMAIL.test($("#ce").value)||!$("#cm").value.trim())return fail("Fill in your name, a valid email and a message.");
-await API.post("/contact",{name:$("#cn").value.trim(),email:$("#ce").value.trim(),message:$("#cm").value.trim()});toast("Message sent. We'll reply soon.");nav("/")}
-}catch(err){fail(err.message);
-if(a=="book"){const did=b.dataset.id;await loadBooked(did);slots(did)}}}
+            if(!n||!EMAIL.test(em))return fail("Enter your name and a valid email.");if(pw.length<6)return fail("Password must be at least 6 characters.");
+            const r=await API.post("/auth/register",{name:n,email:em,password:pw});API.setToken(r.token);DB.me=mapUser(r.user);await refreshPrivate();nav("/dashboard");toast("Account created")}
+        else if(a=="book"){if(!u||u.role!="patient"){go("/login?next=/doctor/"+b.dataset.id);return toast("Log in as a patient to book")}
+            if(!B.time)return fail("Choose a time slot.");
+            const x=mapAppt(B.rid?await API.put("/appointments/"+B.rid+"/reschedule",{date:B.date,time:B.time}):await API.post("/appointments",{doctorId:+b.dataset.id,date:B.date,time:B.time,reason:$("#rs").value}));
+            await refreshPrivate();nav("/confirm/"+x.id)}
+        else if(a=="st"){const x=await API.patch("/appointments/"+b.dataset.id+"/status",{status:b.dataset.v});await refreshPrivate();render();toast("Appointment "+x.status.toLowerCase())}
+        else if(a=="adddoc"){const g=i=>$(i).value.trim(),days=[...document.querySelectorAll(".dyc:checked")].map(c=>+c.value),em=g("#ae").toLowerCase();
+            if(!g("#an")||!g("#asp")||!g("#ah"))return fail("Enter the doctor's name, specialty and hospital.");if(!days.length)return fail("Select at least one available day.");
+            if(!EMAIL.test(em))return fail("Enter a valid login email.");if($("#apw").value.length<6)return fail("Password must be at least 6 characters.");
+            const n=g("#an"),d=await API.post("/doctors",{name:n.startsWith("Dr.")?n:"Dr. "+n,specialty:g("#asp"),hospital:g("#ah"),yearsExperience:+g("#ay")||0,qualifications:g("#aq"),bio:g("#ab"),availableDays:days,email:em,password:$("#apw").value});
+            await loadDocs();await refreshPrivate();render();toast(d.name+" added")}
+        else if(a=="addpatient"){const g=i=>$(i).value.trim();if(!g("#pn")||!EMAIL.test(g("#pe").toLowerCase()))return fail("Enter the patient's name and a valid email.");if($("#pw").value.length<6)return fail("Password must be at least 6 characters.");
+            const r=await API.post("/admin/patients",{name:g("#pn"),email:g("#pe").toLowerCase(),password:$("#pw").value,phone:g("#pp"),dateOfBirth:$("#pd").value,gender:$("#pg").value,address:g("#pa"),medicalConditions:g("#pm")});await refreshPrivate();render();toast(r.name+" added")}
+        else if(a=="rmdoc"){if(!b.dataset.sure){b.dataset.sure=1;b.textContent="Tap again to confirm";return}
+            await API.del("/doctors/"+b.dataset.id);await loadDocs();await refreshPrivate();render();toast("Doctor removed")}
+        else if(a=="msg"){if(!$("#cn").value.trim()||!EMAIL.test($("#ce").value)||!$("#cm").value.trim())return fail("Fill in your name, a valid email and a message.");
+            await API.post("/contact",{name:$("#cn").value.trim(),email:$("#ce").value.trim(),message:$("#cm").value.trim()});toast("Message sent. We'll reply soon.");nav("/")}
+    }catch(err){fail(err.message);
+        if(a=="book"){const did=b.dataset.id;await loadBooked(did);slots(did)}}}
 window.addEventListener("hashchange",render);
 setInterval(()=>{if(me())loadNotes().then(bell).catch(()=>{})},60000);
 (async()=>{try{await loadDocs();if(API.getToken()){try{DB.me=mapUser(await API.get("/auth/me"))}catch(e){API.setToken(null)}}}catch(e){toast(e.message)}render()})();
