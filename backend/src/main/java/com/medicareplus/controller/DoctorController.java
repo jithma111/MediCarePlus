@@ -16,7 +16,6 @@ import java.util.List;
 @RequestMapping("/api/doctors")
 public class DoctorController {
 
-
     private final DoctorService doctors;
     private final AuthContext auth;
 
