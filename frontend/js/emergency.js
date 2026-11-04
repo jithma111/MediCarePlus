@@ -3,11 +3,7 @@
 // Sample data: ambulances, hospital beds and the map. The backend has no tables for these yet,
 //              so they are fixed demo values defined below. Replace them when you add the endpoints.
 (() => {
-<<<<<<< HEAD
     const EM = { rows: [], q: "", all: false, geo: null };
-=======
-    const EM = { rows: [], q: "", all: false };
->>>>>>> 14b130c53e0bd5b1d370584c713358be287c0aaa
 
     /* ---------- sample data (no backend support yet) ---------- */
     const AMBULANCES = [
@@ -99,10 +95,7 @@
     R.emergency = () => {
         const u = me();
         if (!u) return go("/login?next=/emergency");
-<<<<<<< HEAD
         if (u.role == "driver") return go("/driver");
-=======
->>>>>>> 14b130c53e0bd5b1d370584c713358be287c0aaa
         setTimeout(loadEm, 0);
         const staff = u.role != "patient";
 
@@ -196,21 +189,13 @@
         const st = STATUS[r.status] || [r.status];
         const who = staff ? `${esc(r.patient)} · ${esc(r.phone)}` : esc(st[0]);
         const act = staff
-<<<<<<< HEAD
             ? `<div class="emact">${r.status == "OPEN" ? `<button class="embtn" data-act="emst" data-id="${r.id}" data-v="IN_PROGRESS">In progress</button>` : ""}${r.status != "RESOLVED" ? `<button class="embtn go" data-act="emst" data-id="${r.id}" data-v="RESOLVED">Resolved</button>` : ""}<button class="embtn" data-em="showloc" data-loc="${esc(r.location)}" data-lat="${r.latitude ?? ""}" data-lng="${r.longitude ?? ""}">Show location</button> ${admin ? `<button class="embtn bad" data-act="emdel" data-id="${r.id}">Delete</button>` : ""}</div>`
-=======
-            ? `<div class="emact">${r.status == "OPEN" ? `<button class="embtn" data-act="emst" data-id="${r.id}" data-v="IN_PROGRESS">In progress</button>` : ""}${r.status != "RESOLVED" ? `<button class="embtn go" data-act="emst" data-id="${r.id}" data-v="RESOLVED">Resolved</button>` : ""}${admin ? `<button class="embtn bad" data-act="emdel" data-id="${r.id}">Delete</button>` : ""}</div>`
->>>>>>> 14b130c53e0bd5b1d370584c713358be287c0aaa
             : "";
         return `<div class="emreq"><span class="emdot ${sc2}"></span><div class="emreqb">
       <div class="emreqh"><b>${erId(r)}</b><span class="empill ${sc2}">${sl}</span><span class="emago">${ago(r.createdAt)}</span></div>
       <div class="emloc">${esc(r.location)}</div>
       <div class="emdesc">${esc(trunc(r.description, 44))}${staff ? " • " + who : ""}</div>
-<<<<<<< HEAD
       <div class="emdesc">Respond within ${r.targetMinutes} min${r.status != "OPEN" ? " · " + esc(st[0]) : ""}</div>${r.driver ? `<div class="emdesc">🚑 ${esc(r.driver)} · ${STAGE_LABEL[r.stage] || "Assigned"}</div>` : ""}${act}</div></div>`;
-=======
-      <div class="emdesc">Respond within ${r.targetMinutes} min${r.status != "OPEN" ? " · " + esc(st[0]) : ""}</div>${act}</div></div>`;
->>>>>>> 14b130c53e0bd5b1d370584c713358be287c0aaa
     }
 
     function paintEm() {
@@ -274,7 +259,6 @@
     }
     window.loadEm = loadEm;           // app.js calls loadEm() after send / status change / delete
 
-<<<<<<< HEAD
 
     /* ---------- show patient location on Google Maps ---------- */
     window.emCoords = async () => {
@@ -308,8 +292,6 @@
 
     /* ---------- events ---------- */
 
-=======
->>>>>>> 14b130c53e0bd5b1d370584c713358be287c0aaa
     /* ---------- events ---------- */
     document.addEventListener("input", e => { if (e.target.id == "emq") { EM.q = e.target.value; paintEm(); } });
 
@@ -321,7 +303,6 @@
         if (k == "all") { EM.all = !EM.all; paintEm(); }
         else if (k == "menu") { $("#emside").classList.toggle("on"); }
         else if (k == "print") { window.print(); }
-<<<<<<< HEAD
         else if (k == "showloc") { showLocation(b.dataset.loc, b.dataset.lat, b.dataset.lng); }
         else if (k == "geo") {
             if (!navigator.geolocation) return toast("Location is not available in this browser.");
@@ -331,12 +312,6 @@
                     $("#el").value = text;
                     EM.geo = { text, lat: p.coords.latitude, lng: p.coords.longitude };
                 },
-=======
-        else if (k == "geo") {
-            if (!navigator.geolocation) return toast("Location is not available in this browser.");
-            navigator.geolocation.getCurrentPosition(
-                p => { $("#el").value = p.coords.latitude.toFixed(5) + ", " + p.coords.longitude.toFixed(5); },
->>>>>>> 14b130c53e0bd5b1d370584c713358be287c0aaa
                 () => toast("Could not get your location. Please type it in."));
         }
     });
