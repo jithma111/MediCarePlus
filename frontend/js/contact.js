@@ -136,6 +136,7 @@
             ["cts", v("cts"), "Please select a subject."],
             ["ctm", v("ctm"), "Please type your message."],
         ];
+
         const bad = checks.find(c => !c[1]);
         if (bad) { g("w_" + bad[0]).classList.add("bad"); err.textContent = bad[2]; g(bad[0]).focus(); return; }
 
