@@ -49,6 +49,7 @@ public class DoctorService {
         return DoctorDto.of(doctors.findByIdAndActiveTrue(id).orElseThrow(() -> new ApiException(404, "Doctor not found.")));
     }
 
+    
     /** Slots already taken (not cancelled) from today on. */
     @Transactional(readOnly = true)
     public List<BookedSlotDto> booked(Long doctorId) {
@@ -59,6 +60,7 @@ public class DoctorService {
                 .toList();
     }
 
+
     /** Creates the doctor profile and the doctor's login. */
     @Transactional
     public DoctorDto create(DoctorRequest r) {
@@ -67,6 +69,7 @@ public class DoctorService {
         String hospital = clean(r.hospital());
         String email = clean(r.email()).toLowerCase();
         String password = r.password() == null ? "" : r.password();
+
 
         if (name.isEmpty() || specialty.isEmpty() || hospital.isEmpty()) {
             throw new ApiException(400, "Enter the doctor's name, specialty and hospital.");
@@ -85,6 +88,7 @@ public class DoctorService {
             throw new ApiException(409, "That email is already in use.");
         }
 
+
         Doctor d = new Doctor();
         d.setName(name.startsWith("Dr.") ? name : "Dr. " + name);
         d.setSpecialty(specialty);
@@ -98,6 +102,7 @@ public class DoctorService {
         users.save(new User(email, encoder.encode(password), d.getName(), Role.DOCTOR, d));
         return DoctorDto.of(d);
     }
+
 
     /** Removes a doctor: open appointments are cancelled and patients are notified. */
     @Transactional
@@ -116,7 +121,9 @@ public class DoctorService {
         d.setActive(false);
     }
 
+
     private static String clean(String s) {
         return s == null ? "" : s.trim();
     }
+
 }
