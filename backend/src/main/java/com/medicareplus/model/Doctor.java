@@ -59,4 +59,17 @@ public class Doctor {
     public void setAvailableDays(Set<Integer> availableDays) { this.availableDays = availableDays; }
     public boolean isActive() { return active; }
     public void setActive(boolean active) { this.active = active; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Doctor other)) return false;
+        return id != null && id.equals(other.id);
+    }
+
+    @Override
+    public int hashCode() { return getClass().hashCode(); }
+
+    @Override
+    public String toString() { return name + " (" + specialty + ")"; }
 }
