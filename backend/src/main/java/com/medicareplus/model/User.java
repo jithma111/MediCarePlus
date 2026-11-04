@@ -19,6 +19,9 @@ public class User {
     @Column(nullable = false, length = 120)
     private String name;
 
+    @Column(name = "medical_conditions", length = 1000)
+    private String medicalConditions;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "VARCHAR(20)")
     private Role role;
@@ -73,6 +76,8 @@ public class User {
     public void setAddress(String v) { this.address = v; }
     public String getPhoto() { return photo; }
     public void setPhoto(String v) { this.photo = v; }
+    public String getMedicalConditions() { return medicalConditions; }
+    public void setMedicalConditions(String v) { this.medicalConditions = v; }
 
     /** Two users are the same if they have the same id. */
     @Override
