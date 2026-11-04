@@ -3,9 +3,11 @@
 // are written at the top of the message text. No backend change is needed.
 (() => {
     /* ---- clinic details: change these to your real ones ---- */
-    const PHONE = "+94 11 234 5678", PHONE_HREF = "tel:+94112345678", HOURS = "Mon – Sat, 8:00 AM – 6:00 PM";
+    const WA_NUMBER = "94707769993"; // WhatsApp number: country code + number, digits only (no + or spaces). Replace with your real WhatsApp number.
+    const WA_HREF = "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent("Hello MediCare Plus, I need some help.");
+    const PHONE = "+94 707769993", PHONE_HREF = "tel:+94707769993", HOURS = "Mon – Sat, 8:00 AM – 6:00 PM";
     const EMAIL_ADDR = "help@medicareplus.example";
-    const ADDRESS = ["123 Galle Road, Colombo 03", "Colombo, Sri Lanka"];
+    const ADDRESS = ["23 , Deshamanya H K Dharmadasa Mawatha, Colombo 00200"];
     const SUBJECTS = ["General enquiry", "Appointment help", "Billing question", "Feedback", "Technical problem", "Other"];
 
     const P = {
@@ -72,7 +74,7 @@
 
       <div class="ctin ctgrid">
         <section class="ctcard ctinfo" aria-label="Contact details">
-          ${row("b", "phone", "Phone", PHONE, HOURS, PHONE_HREF)}
+          ${row("b", "phone", "Phone", PHONE, HOURS, WA_HREF, ' target="_blank" rel="noopener" aria-label="Open WhatsApp to chat or call us"')}
           ${row("g", "mail", "Email", EMAIL_ADDR, "We usually reply within 24 hours", "mailto:" + EMAIL_ADDR)}
           ${row("p", "pin", "Our Location", ADDRESS[0], ADDRESS[1], "https://www.google.com/maps/search/?api=1&query=" + mapQ, ' target="_blank" rel="noopener"')}
           <a class="ctrow urgent" href="#/emergency"><span class="cti">${I("headset", 24)}</span><span><b>Need urgent help?</b><small>For medical emergencies, please call <b>1990</b></small></span><span class="ctgo" style="border:0">${I("arrow", 16)}</span></a>
