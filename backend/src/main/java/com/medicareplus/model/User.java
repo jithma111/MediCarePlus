@@ -79,6 +79,7 @@ public class User {
     public String getMedicalConditions() { return medicalConditions; }
     public void setMedicalConditions(String v) { this.medicalConditions = v; }
 
+    
     /** Two users are the same if they have the same id. */
     @Override
     public boolean equals(Object o) {
