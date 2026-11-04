@@ -33,10 +33,16 @@ public class Notification {
         this.message = message;
     }
 
-    public Long getId() { return id; }
-    public User getUser() { return user; }
-    public String getMessage() { return message; }
-    public boolean isSeen() { return seen; }
-    public void setSeen(boolean seen) { this.seen = seen; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
+    public Long getId() 
+        { return id; }
+    public User getUser() 
+        { return user; }
+    public String getMessage() 
+        { return message; }
+    public boolean isSeen() 
+        { return seen; }
+    public void setSeen(boolean seen) 
+        { this.seen = seen; }
+    public LocalDateTime getCreatedAt() 
+        { return createdAt; }
 }

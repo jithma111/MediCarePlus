@@ -42,21 +42,14 @@ public class ContactMessage {
         this.senderId = senderId;
     }
 
-    public Long getId() { return id; }
-    public String getName() { return name; }
-    public String getEmail() { return email; }
-    public String getMessage() { return message; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public Long getSenderId() { return senderId; }
-    public boolean isSeen() { return seen; }
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-
-    /** Editing a message marks it unread again, so the admin notices the change. */
-    public void setMessage(String message) {
-        this.message = message;
-        this.updatedAt = LocalDateTime.now();
-        this.seen = false;
-    }
-
-    public void markSeen() { this.seen = true; }
+    public Long getId() 
+        { return id; }
+    public String getName() 
+        { return name; }
+    public String getEmail() 
+        { return email; }
+    public String getMessage() 
+        { return message; }
+    public LocalDateTime getCreatedAt() 
+        { return createdAt; }
 }
