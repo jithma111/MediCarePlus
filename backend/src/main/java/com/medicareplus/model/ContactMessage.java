@@ -51,6 +51,7 @@ public class ContactMessage {
     public boolean isSeen() { return seen; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
 
+
     /** Editing a message marks it unread again, so the admin notices the change. */
     public void setMessage(String message) {
         this.message = message;
@@ -58,5 +59,6 @@ public class ContactMessage {
         this.seen = false;
     }
 
+    
     public void markSeen() { this.seen = true; }
 }
