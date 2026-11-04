@@ -12,6 +12,10 @@ public enum Role {
     ADMIN {
         @Override public String dashboardTitle() { return "Admin dashboard"; }
         @Override public boolean canManageDoctors() { return true; }
+    },
+    DRIVER {
+        @Override public String dashboardTitle() { return "Driver dashboard"; }
+        @Override public boolean canManageDoctors() { return false; }
     };
 
     /** Each role writes its own version of these methods (polymorphism). */
