@@ -60,11 +60,14 @@ public final class Dtos {
     }
 
     public record AppointmentDto(Long id, Long doctorId, String doctorName, String patientEmail, String patientName,
-                                 String date, String time, String reason, String status) {
+                                 String date, String time, String reason, String status,
+                                 String patientPhone, String patientDob, String patientGender, String patientConditions) {
         public static AppointmentDto of(Appointment a) {
             return new AppointmentDto(a.getId(), a.getDoctor().getId(), a.getDoctor().getName(),
                     a.getPatient().getEmail(), a.getPatient().getName(),
-                    a.getApptDate().toString(), a.getApptTime().toString(), a.getReason(), a.getStatus().label());
+                    a.getApptDate().toString(), a.getApptTime().toString(), a.getReason(), a.getStatus().label(),
+                    a.getPatient().getPhone(), a.getPatient().getDateOfBirth(), a.getPatient().getGender(),
+                    a.getPatient().getMedicalConditions());
         }
     }
 
@@ -76,6 +79,18 @@ public final class Dtos {
     }
 
     public record StatsDto(long patients) {
+    }
+
+    public record PatientRequest(String name, String email, String password, String phone, String dateOfBirth,
+                                 String gender, String address, String medicalConditions) {
+    }
+
+    public record PatientDto(Long id, String name, String email, String phone, String dateOfBirth, String gender,
+                             String medicalConditions) {
+        public static PatientDto of(User u) {
+            return new PatientDto(u.getId(), u.getName(), u.getEmail(), u.getPhone(), u.getDateOfBirth(),
+                    u.getGender(), u.getMedicalConditions());
+        }
     }
 
     public record ContactRequest(String name, String email, String message) {

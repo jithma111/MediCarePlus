@@ -9,7 +9,7 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "appointments",
         indexes = @Index(name = "idx_appt_slot", columnList = "doctor_id, appointment_date, appointment_time"))
-public class Appointment {
+public class Appointment implements Comparable<Appointment> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,4 +63,16 @@ public class Appointment {
     public boolean isDoctorReminderSent() { return doctorReminderSent; }
     public void setDoctorReminderSent(boolean v) { this.doctorReminderSent = v; }
     public LocalDateTime getCreatedAt() { return createdAt; }
+
+    /** Sorts appointments by date, then by time. */
+    @Override
+    public int compareTo(Appointment other) {
+        int byDate = apptDate.compareTo(other.apptDate);
+        return byDate != 0 ? byDate : apptTime.compareTo(other.apptTime);
+    }
+
+    @Override
+    public String toString() {
+        return "Appointment{id=" + id + ", date=" + apptDate + " " + apptTime + ", status=" + status + "}";
+    }
 }
