@@ -21,10 +21,13 @@ import java.util.Map;
 @RequestMapping("/api/emergencies")
 public class EmergencyController {
 
-    public record NewEmergency(String phone, String location, String description, String severity) { }
+    public record NewEmergency(String phone, String location, String description, String severity,
+                               Double latitude, Double longitude) { }
     public record StatusUpdate(String status) { }
     public record EmergencyDto(Long id, String patient, String phone, String location, String description,
-                               String severity, int targetMinutes, String status, String createdAt) { }
+                               String severity, int targetMinutes, String status, String createdAt,
+                               Double latitude, Double longitude, String driver, String stage,
+                               Double driverLatitude, Double driverLongitude) { }
 
     private final EmergencyRepository emergencies;
     private final AuthContext auth;
@@ -51,8 +54,10 @@ public class EmergencyController {
         } catch (IllegalArgumentException e) {
             throw new ApiException(400, "Choose a severity.");
         }
-        return toDto(emergencies.save(new EmergencyRequest(patient, cut(phone, 30), cut(location, 255),
-                cut(description, 1000), severity)));
+        EmergencyRequest saved = new EmergencyRequest(patient, cut(phone, 30), cut(location, 255),
+                cut(description, 1000), severity);
+        if (validPoint(body.latitude(), body.longitude())) saved.setPosition(body.latitude(), body.longitude());
+        return toDto(emergencies.save(saved));
     }
 
     /** READ: a patient sees only their own requests. */
@@ -100,7 +105,16 @@ public class EmergencyController {
     private EmergencyDto toDto(EmergencyRequest e) {
         return new EmergencyDto(e.getId(), e.getPatient().getName(), e.getPhone(), e.getLocation(),
                 e.getDescription(), e.getSeverity().name(), e.getSeverity().targetMinutes(),
-                e.getStatus().name(), e.getCreatedAt().toString());
+                e.getStatus().name(), e.getCreatedAt().toString(),
+                e.getLatitude(), e.getLongitude(),
+                e.getDriver() == null ? null : e.getDriver().getName(),
+                e.getStage() == null ? null : e.getStage().name(),
+                e.getDriverLat(), e.getDriverLng());
+
+    }
+
+    static boolean validPoint(Double lat, Double lng) {
+        return lat != null && lng != null && Math.abs(lat) <= 90 && Math.abs(lng) <= 180;
     }
 
     private static String clean(String s) { return s == null ? "" : s.trim(); }
